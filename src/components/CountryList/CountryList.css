@@ -1,4 +1,27 @@
 .CountryList{
     width: 100%;
-    background: green;
+    height: 550px;
+    overflow: hidden;
+    overflow-y: scroll;
+    border: 1px solid #000;
+    padding: 20px;
+}
+.CountryList :first-child {
+    margin-top: 0;
+}
+.countryName{ 
+    font-size: 20px;
+    cursor: pointer;
+    color: #000;
+    text-shadow: 1px 1px 0 #ccc;
+}
+.countryName:hover{
+    text-shadow: 1px 1px 0 #000;
+    color: #ccc;
+}
+
+.countryName[tabindex]:focus{
+    color: #ccc;
+    outline: none;
+    text-shadow: 1px 1px 0 #000;
 }
