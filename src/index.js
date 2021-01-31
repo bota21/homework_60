@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Main from './container/Main';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'https://restcountries.eu';
 
 ReactDOM.render(
   <React.StrictMode>
