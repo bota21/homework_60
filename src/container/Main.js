@@ -11,6 +11,7 @@ const Main = () => {
   const [countries, setCountries] =useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [showInfo, setShowInfo] = useState([]);
+  const [bordersCountry, setBordersCountry] = useState([]);
   
   useEffect(() => {
     const fetchData = async() => {
@@ -19,13 +20,7 @@ const Main = () => {
     }
     fetchData().catch(console.error);
   }, [])
-  
-  let addCountryLists = countries.map(item => {        
-    return <CountryList key={item.alpha3Code} 
-    countryName={item.name}
-    onClick={() => setSelectedCountry(item.alpha3Code)}
-    />      
-  })
+
   useEffect(() => {
     const fetchData = async() => {
       if(selectedCountry !== null) {
@@ -36,23 +31,46 @@ const Main = () => {
     fetchData().catch(console.error)
   }, [selectedCountry])
   
+  useEffect(() => {
+    const fetchData = async() => {
+      if(selectedCountry !== null) {
+        const sendRequest = await axios.get(MainURL + alphaURL + selectedCountry);
+        const newCountries = sendRequest.data.borders;
+        newCountries.map(async country => {
+          const newBorders = await axios.get(MainURL + alphaURL + country);
+          let copyBorder = [...bordersCountry];
+          copyBorder.push(newBorders.data.name)
+          setBordersCountry(copyBorder)
+        })
+      }      
+    }
+    fetchData().catch(console.error)
+  }, [showInfo])
+  
+  let addCountryLists = countries.map(item => {        
+    return <CountryList key={item.alpha3Code} 
+    countryName={item.name}
+    onClick={() => setSelectedCountry(item.alpha3Code)}
+    />      
+  })
+  
   return (
     <div className="main">
     <div className="countryList_wrapper">
     {addCountryLists}
     </div>
-    
-    <CountryInfo id={selectedCountry}
-    countryName={showInfo.name}
-    flag={showInfo.flag} alt={showInfo.alpha3Code}
-    capital={showInfo.capital}
-    code={showInfo.alpha3Code}
-    // currencies={showInfo.currencies}
-    // languages={showInfo.languages}
-    population={showInfo.population}
-    region={showInfo.region}
-    borders={showInfo.borders}
-    />
+    {selectedCountry !== null ?
+      <CountryInfo id={selectedCountry}
+      countryName={showInfo.name}
+      flag={showInfo.flag} alt={showInfo.alpha3Code}
+      capital={showInfo.capital}
+      code={showInfo.alpha3Code}
+      population={showInfo.population}
+      region={showInfo.region}
+      borders={bordersCountry}
+      />
+      : <div className='CountryInfo'> Please choose country to show information</div>
+    }
     </div>
     );
   }

@@ -1,13 +1,16 @@
 import './CountryInfo.css';
 import { React, useEffect } from 'react';
+import {v4 as uuidv4} from 'uuid';
 
 const CountryInfo = props => {
-    
+
     useEffect(() => {
         console.log('[CountryInfo] id=', props.id);
       }, [props.id]);
-     
-    
+
+    let addBorders = props.borders.map(country => {
+        return <li key={uuidv4()}>{country}</li>
+    })
     return (
         <div className='CountryInfo'>
             <div className="info_wrapper">
@@ -16,11 +19,11 @@ const CountryInfo = props => {
             </div>            
             <p>Capital: <span>{props.capital}</span></p>
             <p>Code: <span>{props.code}</span></p>
-            <p>Currencies: <span>{props.currencies}</span></p>
-            <p>Languages: <span>{props.languages}</span></p>
             <p>Population: <span>{props.population}</span></p>
             <p>Region: <span>{props.region}</span></p>
-            <p>Borders with: <span>{props.borders}</span></p>
+            <ul>Borders with: 
+            {addBorders}
+            </ul>
         </div>
     )
 }
